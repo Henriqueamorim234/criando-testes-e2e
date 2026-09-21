@@ -9,7 +9,7 @@ describe('Buscar Autor por ID', () => {
        await conexao.destroy();
     })
 
-    test.todo('Retornar os dados do autor existente (201)', async ()=>{
+    test('Retornar os dados do autor existente (201)', async ()=>{
         // cadastrar um autor
         const respostaDoCadastro = await request(app).post('/autores').send({
           "nome": "H.P. Lovecraft",
@@ -21,11 +21,29 @@ describe('Buscar Autor por ID', () => {
         // verificar se o body da resposta contém os dados do autor cadastrato
         await request(app).get(`/autores/${idDoAutor}`).expect(200).expect((res)=>{
           const dadosDoAutor = res.body;
-          console.log(res.status, res.body);          assert.strictEqual(typeof dadosDoAutor.id, 'number');
+          assert.strictEqual(typeof dadosDoAutor.id, 'number');
           assert.strictEqual(dadosDoAutor.nome, 'H.P. Lovecraft');
           assert.strictEqual(dadosDoAutor.nacionalidade, 'Ingles');
         })
     })
+
+    test('Retornar os dados do autor existente (201) (usando banco de dados)', async ()=>{
+      // cadastrar um autor
+      const resultado = await conexao('autores').insert({
+        nome: 'H.P. Lovecraft',
+        nacionalidade: 'Ingles'
+      }, 'id')
+      const idDoAutor = resultado[0].id;
+      // enviar request para (GET) /autores/:id
+      // verificar se o status code é 201
+      // verificar se o body da resposta contém os dados do autor cadastrato
+      await request(app).get(`/autores/${idDoAutor}`).expect(200).expect((res)=>{
+        const dadosDoAutor = res.body;
+        assert.strictEqual(typeof dadosDoAutor.id, 'number');
+        assert.strictEqual(dadosDoAutor.nome, 'H.P. Lovecraft');
+        assert.strictEqual(dadosDoAutor.nacionalidade, 'Ingles');
+      })
+  })
 
     test('Retorna um erro quando o autor não exista (404)', async ()=>{
         // enviar request para (GET) /autores/:999
