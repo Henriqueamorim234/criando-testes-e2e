@@ -1,13 +1,7 @@
+import { calcularValorVenda } from "#src/domain/calcula-valor-venda.js";
+
 class Venda {
   static db;
-
-  static TIPOS_PAGAMENTO = {
-    CARTAO_CREDITO: 0.05,
-    CARTAO_DEBITO: 0.02,
-    BOLETO: 0,
-    DINHEIRO: 0,
-    PIX: -0.05,
-  };
 
   static configurarDB(db) {
     this.db = db;
@@ -32,12 +26,11 @@ class Venda {
     this.updated_at = updated_at || new Date().toISOString();
   }
 
-  static calcularValorFinal(valor, tipoPagamento) {
-    const ajuste = Venda.TIPOS_PAGAMENTO[tipoPagamento];
-    if (ajuste === undefined) {
-      return valor;
-    }
-    return Math.round(Number(valor) * (1 + ajuste));
+
+
+  static calcularValorVenda(valor, tipoPagamento) {
+    const valorFinal = calcularValorVenda(valor, tipoPagamento);
+    return valorFinal;
   }
 
   static async pegarVendas() {

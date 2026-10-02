@@ -22,7 +22,9 @@ export class VendasController {
       });
     }
 
-    if (!(modoPagamento in Venda.TIPOS_PAGAMENTO)) {
+    try {
+      Venda.validarTipoPagamento(modoPagamento);
+    } catch {
       return res.status(400).json({
         message: 'Tipo de pagamento inválido',
         type: 'INVALID_DATA',
@@ -38,7 +40,7 @@ export class VendasController {
         });
       }
 
-      const valorFinal = Venda.calcularValorFinal(valor, modoPagamento);
+      const valorFinal = Venda.calcularValorVenda(valor, modoPagamento);
       const venda = new Venda({
         livro_id: idLivro,
         valor: valorFinal,
