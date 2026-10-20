@@ -5,8 +5,8 @@ const router = Router();
 
 const livrosController = new LivrosController(db);
 
-router.get('/livros', livrosController.listarLivros);
-router.get('/livros/:id', livrosController.buscarLivroPorId);
+router.get('/livros', (req, res) => livrosController.listarLivros(req, res));
+router.get('/livros/:id', (req, res) => livrosController.buscarLivroPorId(req, res));
 router.post('/livros', livrosController.cadastrarLivro);
 
 export default router;

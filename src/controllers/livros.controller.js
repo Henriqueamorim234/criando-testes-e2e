@@ -1,13 +1,15 @@
 import Livro from '#models/livro.js';
+import { LivrosServices } from '#services/livros.services.js';
 
 export class LivrosController {
   constructor(databaseConnection) {
     Livro.configurarDB(databaseConnection);
+    this.livroService = new LivrosServices(databaseConnection)
   }
 
   async listarLivros(req, res) {
     try {
-      const resultado = await Livro.pegarLivros();
+      const resultado = await this.livroService.listarLivros();
       res.status(200).send(resultado);
     } catch (err) {
       res.status(500).json(err.message);
@@ -17,9 +19,9 @@ export class LivrosController {
   async buscarLivroPorId(req, res) {
     const { id } = req.params;
     try {
-      const resultado = await Livro.pegarPeloId(id);
+      const resultado = await this.livroService.buscarLivroPorId(id);
       if (!resultado) {
-        return res.status(404).json({ message: 'Livro não encontrado' });
+        return res.status(404).json({ message: 'Livro não encontrado', type: 'NOT_FOUND' });
       }
       res.status(200).send(resultado);
     } catch (err) {
