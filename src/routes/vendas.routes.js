@@ -5,6 +5,6 @@ const router = Router();
 
 const vendasController = new VendasController(db);
 
-router.post('/vendas', vendasController.registrarVenda);
+router.post('/vendas', vendasController.registrarVenda.bind(vendasController));
 
 export default router;

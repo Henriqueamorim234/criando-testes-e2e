@@ -1,4 +1,4 @@
-import { calcularValorVenda } from "#src/domain/calcula-valor-venda.js";
+import { calcularValorVenda, TIPOS_PAGAMENTO } from "#src/domain/calcula-valor-venda.js";
 
 class Venda {
   static db;
@@ -26,7 +26,11 @@ class Venda {
     this.updated_at = updated_at || new Date().toISOString();
   }
 
-
+  static validarTipoPagamento(tipoPagamento) {
+    if (TIPOS_PAGAMENTO[tipoPagamento] === undefined) {
+      throw new Error(`Tipo de pagamento ${tipoPagamento} não suportado`);
+    }
+  }
 
   static calcularValorVenda(valor, tipoPagamento) {
     const valorFinal = calcularValorVenda(valor, tipoPagamento);

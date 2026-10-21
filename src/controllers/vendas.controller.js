@@ -1,12 +1,16 @@
 import Venda from '#models/venda.js';
 import Livro from '#models/livro.js';
 import Editora from '#models/editora.js';
+import  VendasServices  from '#services/vendas.services.js';
+import { EmailGateway } from '#src/gateways/emailGateway.js';
 
 export class VendasController {
   constructor(databaseConnection) {
     Venda.configurarDB(databaseConnection);
     Livro.configurarDB(databaseConnection);
     Editora.configurarDB(databaseConnection);
+    this.vendasServices = new VendasServices(databaseConnection);
+    this.emailGateway = new EmailGateway();
   }
 
   async registrarVenda(req, res) {
@@ -40,17 +44,16 @@ export class VendasController {
         });
       }
 
-      const valorFinal = Venda.calcularValorVenda(valor, modoPagamento);
-      const venda = new Venda({
-        livro_id: idLivro,
-        valor: valorFinal,
-        tipo_pagamento: modoPagamento,
-      });
-      const resposta = await venda.salvar();
-
+      const resposta = await this.vendasServices.registrarVenda({idLivro, modoPagamento, valor});
       const editora = await Editora.pegarPeloId(livro.editora_id);
-      await venda.enviarEmail(editora);
 
+      const venda = new Venda(resposta);
+      await this.emailGateway.enviarEmail({
+        remetente: 'vendas@livraria.com',
+        destinatario: editora.email,
+        assunto: `a venda ${venda.id} foi registrada com sucesso`,
+        mensagem: `Venda registrada com sucesso para o livro ${livro.titulo}`,
+      })
       return res.status(200).json({
         message: 'venda registrada',
         content: Venda.paraResposta(resposta),
