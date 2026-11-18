@@ -1,8 +1,8 @@
-- Contexto, Ação, Resultado esperado 
+- Contexto, Ação, Resultado esperado
 
 ## CADASTRAR UM AUTOR
 
-Rota: (POST) /autores 
+Rota: (POST) /autores
 
 Cenários:
 

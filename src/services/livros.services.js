@@ -1,17 +1,17 @@
-import Livro from "#models/livro.js";
+import Livro from '#models/livro.js';
 
 export class LivrosServices {
-    constructor(databaseConnection) {
-        Livro.configurarDB(databaseConnection);
-      }
-    
-    async listarLivros(){
-        const resultado = await Livro.pegarLivros();
-        return resultado;
-    }
+  constructor(databaseConnection) {
+    Livro.configurarDB(databaseConnection);
+  }
 
-    async buscarLivroPorId(id){
-        const resultado = await Livro.pegarPeloId(id);
-        return resultado;
-    }
+  async listarLivros() {
+    const resultado = await Livro.pegarLivros();
+    return resultado;
+  }
+
+  async buscarLivroPorId(id) {
+    const resultado = await Livro.pegarPeloId(id);
+    return resultado;
+  }
 }

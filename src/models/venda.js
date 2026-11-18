@@ -1,4 +1,4 @@
-import { calcularValorVenda, TIPOS_PAGAMENTO } from "#src/domain/calcula-valor-venda.js";
+import { calcularValorVenda, TIPOS_PAGAMENTO } from '#src/domain/calcula-valor-venda.js';
 
 class Venda {
   static db;

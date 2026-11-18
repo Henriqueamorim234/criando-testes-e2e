@@ -4,7 +4,7 @@ import { LivrosServices } from '#services/livros.services.js';
 export class LivrosController {
   constructor(databaseConnection) {
     Livro.configurarDB(databaseConnection);
-    this.livroService = new LivrosServices(databaseConnection)
+    this.livroService = new LivrosServices(databaseConnection);
   }
 
   async listarLivros(req, res) {
@@ -34,9 +34,7 @@ export class LivrosController {
     const livro = new Livro(body);
     try {
       const resposta = await livro.salvar(livro);
-      return res
-        .status(201)
-        .json({ message: 'livro criado', content: resposta });
+      return res.status(201).json({ message: 'livro criado', content: resposta });
     } catch (err) {
       return res.status(500).json(err.message);
     }
