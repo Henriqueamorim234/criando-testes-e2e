@@ -1,10 +1,11 @@
 import { describe, test, after, beforeEach } from 'node:test';
 import request from 'supertest';
-import app from '#src/app.js';
+import { createTestApp } from '#test/utils/create-test-app.js';
 import conexao from '#db/singleton-connection.js';
-import assert from 'node:assert';
 
 describe('Listar autores', () => {
+  const app = createTestApp();
+
   after(async () => {
     await conexao.destroy();
   });

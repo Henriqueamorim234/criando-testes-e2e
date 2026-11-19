@@ -1,11 +1,13 @@
 import { describe, test, after } from 'node:test';
 import request from 'supertest';
-import app from '#src/app.js';
+import { createTestApp } from '#test/utils/create-test-app.js';
 import conexao from '#db/singleton-connection.js';
 import assert from 'node:assert';
 import { criarLivro } from '#test/factories/livro.factories.js';
 
 describe('Buscar livro por ID', () => {
+  const app = createTestApp();
+
   after(async () => {
     await conexao.destroy();
   });
