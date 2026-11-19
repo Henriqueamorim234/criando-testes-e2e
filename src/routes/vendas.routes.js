@@ -1,10 +1,19 @@
 import { Router } from 'express';
 import { VendasController } from '#controllers/vendas.controller.js';
 import db from '#db/singleton-connection.js';
-const router = Router();
+import VendasServices from '#services/vendas.services.js';
 
-const vendasController = new VendasController(db);
+export default function vendasRoutes(dependencias) {
+  const router = Router();
 
-router.post('/vendas', vendasController.registrarVenda.bind(vendasController));
+  const vendasServices = new VendasServices(
+    db,
+    dependencias.emailGateway,
+    dependencias.estoqueGateway,
+  );
+  const vendasController = new VendasController(db, vendasServices);
 
-export default router;
+  router.post('/vendas', vendasController.registrarVenda.bind(vendasController));
+
+  return router;
+}

@@ -1,9 +1,11 @@
 import express from 'express';
 import { routes } from './routes/index.js';
 
-const app = express();
-app.use(express.json());
+export default function criarAplicacao(dependencias) {
+  const app = express();
+  app.use(express.json());
 
-routes(app);
+  routes(app, dependencias);
 
-export default app;
+  return app;
+}
